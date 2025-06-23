@@ -124,6 +124,7 @@ class AODSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::one::Sh
       const edm::EDGetTokenT<reco::JetTagCollection> bTagProbbbToken_;
       const edm::EDGetTokenT<vector<reco::GsfElectron> > recoElectronToken_;
       const edm::EDGetTokenT<pat::ElectronCollection> lowPtElectronToken_;
+      const edm::EDGetTokenT<vector<reco::Track> > dsaMuonToken_; 
       const edm::EDGetTokenT<vector<pat::IsolatedTrack> > isoTracksToken_;
       const edm::EDGetTokenT<vector<pat::PackedCandidate> > packedPFCandToken_;
       const edm::EDGetTokenT<vector<reco::GenParticle> > genParticleToken_;
@@ -159,6 +160,7 @@ class AODSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::one::Sh
       edm::Handle<reco::JetTagCollection> bTagProbbbHandle_;
       edm::Handle<vector<reco::GsfElectron> > recoElectronHandle_;
       edm::Handle<pat::ElectronCollection> lowPtElectronHandle_;
+      edm::Handle<vector<reco::Track> > dsaMuonHandle_;
       edm::Handle<vector<pat::IsolatedTrack> > isoTracksHandle_;
       edm::Handle<vector<pat::PackedCandidate> > packedPFCandHandle_;
       edm::Handle<vector<reco::PFJet> > recoJetHandle_;
@@ -223,6 +225,7 @@ AODSkimmer::AODSkimmer(const edm::ParameterSet& ps)
    bTagProbbbToken_(consumes<reco::JetTagCollection>(ps.getParameter<edm::InputTag>("bTagProbbb"))),
    recoElectronToken_(consumes<vector<reco::GsfElectron> >(ps.getParameter<edm::InputTag>("recoElectron"))),
    lowPtElectronToken_(consumes<pat::ElectronCollection>(ps.getParameter<edm::InputTag>("lowPtElectron"))),
+   dsaMuonToken_(consumes<vector<reco::Track> >(ps.getParameter<edm::InputTag>("displacedStandAloneMuons"))),
    isoTracksToken_(consumes<vector<pat::IsolatedTrack> >(ps.getParameter<edm::InputTag>("isoTracks"))),
    packedPFCandToken_(consumes<vector<pat::PackedCandidate> >(ps.getParameter<edm::InputTag>("packedPFCands"))),
    genParticleToken_(consumes<vector<reco::GenParticle> >(ps.getParameter<edm::InputTag>("genParticle"))),
@@ -457,6 +460,7 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    iEvent.getByToken(bTagProbbbToken_,bTagProbbbHandle_);
    iEvent.getByToken(recoElectronToken_,recoElectronHandle_);
    iEvent.getByToken(lowPtElectronToken_,lowPtElectronHandle_);
+   iEvent.getByToken(dsaMuonToken_,dsaMuonHandle_);
    iEvent.getByToken(isoTracksToken_,isoTracksHandle_);
    iEvent.getByToken(packedPFCandToken_,packedPFCandHandle_);
    iEvent.getByToken(recoJetToken_,recoJetHandle_);
@@ -656,6 +660,9 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       nt.recoLowPtElectronTrkNumPixHits_.push_back(track->hitPattern().numberOfValidPixelHits());
       nt.recoLowPtElectronTrkNumStripHits_.push_back(track->hitPattern().numberOfValidStripHits());
    }
+
+
+   // Handling DSA Muons
 
    // Handling photons
    for (const auto & ph : *photonsHandle_) {
