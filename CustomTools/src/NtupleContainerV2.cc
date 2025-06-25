@@ -167,6 +167,28 @@ void NtupleContainerV2::CreateTreeBranches() {
     outT->Branch("LptElectron_gedIdx",&recoLowPtElectronGEDidx_);
     outT->Branch("LptElectron_gedIsMatched",&recoLowPtElectronGEDisMatched_);
 
+    // DSA muons
+    outT->Branch("nDSAMuon", &nDSAMuon_);
+    outT->Branch("recoDSAMuonPt", &recoDSAMuonPt_);
+    outT->Branch("recoDSAMuonEta", &recoDSAMuonEta_);
+    outT->Branch("recoDSAMuonPhi", &recoDSAMuonPhi_);
+    outT->Branch("recoDSAMuonE", &recoDSAMuonE_);
+    outT->Branch("recoDSAMuonPx", &recoDSAMuonPx_);
+    outT->Branch("recoDSAMuonPy", &recoDSAMuonPy_);
+    outT->Branch("recoDSAMuonPz", &recoDSAMuonPz_);
+    outT->Branch("recoDSAMuonVxy", &recoDSAMuonVxy_);
+    outT->Branch("recoDSAMuonVz", &recoDSAMuonVz_);
+    outT->Branch("recoDSAMuonDxy", &recoDSAMuonDxy_);
+    outT->Branch("recoDSAMuonDxyError", &recoDSAMuonDxyError_);
+    outT->Branch("recoDSAMuonDz", &recoDSAMuonDz_);
+    outT->Branch("recoDSAMuonDzError", &recoDSAMuonDzError_);
+    outT->Branch("recoDSAMuonTrkChi2", &recoDSAMuonTrkChi2_);
+    outT->Branch("recoDSAMuonTrkProb", &recoDSAMuonTrkProb_);
+    outT->Branch("recoDSAMuonTrkNumTrackerHits", &recoDSAMuonTrkNumTrackerHits_);
+    outT->Branch("recoDSAMuonTrkNumPixHits", &recoDSAMuonTrkNumPixHits_);
+    outT->Branch("recoDSAMuonTrkNumStripHits", &recoDSAMuonTrkNumStripHits_);
+    outT->Branch("recoDSAMuonCharge", &recoDSAMuonCharge_);
+
     // Photons
     outT->Branch("nPhoton",&nPhotons_);
     outT->Branch("Photon_et",&PhotonEt_);
@@ -690,6 +712,28 @@ void NtupleContainerV2::ClearTreeBranches() {
     recoLowPtElectronGEDidx_.clear();
     recoLowPtElectronGEDisMatched_.clear();
 
+    // DSA muons
+    nDSAMuon_ = 0;
+    recoDSAMuonPt_.clear();
+    recoDSAMuonEta_.clear();
+    recoDSAMuonPhi_.clear();
+    recoDSAMuonE_.clear();
+    recoDSAMuonPx_.clear();
+    recoDSAMuonPy_.clear();
+    recoDSAMuonPz_.clear();
+    recoDSAMuonVxy_.clear();
+    recoDSAMuonVz_.clear();
+    recoDSAMuonDxy_.clear();
+    recoDSAMuonDxyError_.clear();
+    recoDSAMuonDz_.clear();
+    recoDSAMuonDzError_.clear();
+    recoDSAMuonTrkChi2_.clear();
+    recoDSAMuonTrkProb_.clear();
+    recoDSAMuonTrkNumTrackerHits_.clear();
+    recoDSAMuonTrkNumPixHits_.clear();
+    recoDSAMuonTrkNumStripHits_.clear();
+    
+    recoDSAMuonCharge_.clear();
     // Gen weight and pileup
     genwgt_ = 0;
     genpuobs_ = -9999;

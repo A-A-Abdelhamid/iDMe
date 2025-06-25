@@ -663,11 +663,46 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
    // Handling DSA Muons
-   std::<vector<reco::Track> dsa_muonTracks{};
-   vector<math::XYZTLorentzVector> dsa_muon_p4s;
-   for (unsigned int i = 0; i < dsaMuonHandle_->size(); i++) {
+   nt.nDSAMuon_ = dsaMuonHandle_->size();
+   std::vector<reco::Track> dsa_muonTracks{};
+   std::vector<math::XYZTLorentzVector> dsa_muon_p4s;
 
+   for (const auto & track : *dsaMuonHandle_) {
+      dsa_muonTracks.push_back(track);
 
+      // Construct TLorentzVector from track (muon mass assumed)
+      float mass = 0.10566; // GeV
+      float p = track.p();
+      float energy = sqrt(p*p + mass*mass);
+      math::XYZTLorentzVector p4(track.px(), track.py(), track.pz(), energy);
+      dsa_muon_p4s.push_back(p4);
+
+      // Basic kinematics
+      nt.recoDSAMuonPt_.push_back(track.pt());
+      nt.recoDSAMuonEta_.push_back(track.eta());
+      nt.recoDSAMuonPhi_.push_back(track.phi());
+      nt.recoDSAMuonE_.push_back(energy);
+      nt.recoDSAMuonPx_.push_back(track.px());
+      nt.recoDSAMuonPy_.push_back(track.py());
+      nt.recoDSAMuonPz_.push_back(track.pz());
+
+      // Vertex info
+      nt.recoDSAMuonVxy_.push_back(track.vertex().rho());
+      nt.recoDSAMuonVz_.push_back(track.vertex().z());
+
+      // Tracking info
+      nt.recoDSAMuonDxy_.push_back(track.dxy(pv.position()));
+      nt.recoDSAMuonDxyError_.push_back(track.dxyError());
+      nt.recoDSAMuonDz_.push_back(track.dz(pv.position()));
+      nt.recoDSAMuonDzError_.push_back(track.dzError());
+      nt.recoDSAMuonTrkChi2_.push_back(track.normalizedChi2());
+      nt.recoDSAMuonTrkProb_.push_back(TMath::Prob(track.chi2(), (int)track.ndof()));
+      nt.recoDSAMuonTrkNumTrackerHits_.push_back(track.hitPattern().numberOfValidTrackerHits());
+      nt.recoDSAMuonTrkNumPixHits_.push_back(track.hitPattern().numberOfValidPixelHits());
+      nt.recoDSAMuonTrkNumStripHits_.push_back(track.hitPattern().numberOfValidStripHits());
+
+      // Charge
+      nt.recoDSAMuonCharge_.push_back(track.charge());
    }
 
 
