@@ -151,6 +151,7 @@ class ElectronSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::on
       const edm::EDGetTokenT<vector<pat::Electron> > recoNanoElectronToken_;
       const edm::EDGetTokenT<vector<pat::Electron> >lowPtElectronToken_;
       const edm::EDGetTokenT<vector<pat::Electron> >lowPtNanoElectronToken_;
+      const edm::EDGetTokenT<vector<reco::Track> > dsaMuonToken_;
       const edm::EDGetTokenT<vector<pat::PackedCandidate> > packedPFCandToken_;
       const edm::EDGetTokenT<vector<pat::Jet> > recoJetToken_;
       const edm::EDGetTokenT<GenEventInfoProduct> genEvtInfoToken_;
@@ -176,6 +177,7 @@ class ElectronSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::on
       edm::Handle<vector<pat::Electron> > recoNanoElectronHandle_;
       edm::Handle<vector<pat::Electron> > lowPtElectronHandle_;
       edm::Handle<vector<pat::Electron> >lowPtNanoElectronHandle_;
+      edm::Handle<vector<reco::Track> > dsaMuonHandle_;
       edm::Handle<vector<pat::PackedCandidate> > packedPFCandHandle_;
       edm::Handle<vector<pat::Jet> > recoJetHandle_;
       edm::Handle<GenEventInfoProduct> genEvtInfoHandle_;
@@ -227,6 +229,7 @@ ElectronSkimmer::ElectronSkimmer(const edm::ParameterSet& ps)
    recoNanoElectronToken_(consumes<vector<pat::Electron> >(ps.getParameter<edm::InputTag>("nanoElectron"))),
    lowPtElectronToken_(consumes<vector<pat::Electron> >(ps.getParameter<edm::InputTag>("lowPtElectron"))),
    lowPtNanoElectronToken_(consumes<vector<pat::Electron> >(ps.getParameter<edm::InputTag>("lowPtNanoElectron"))),
+   dsaMuonToken_(consumes<vector<reco::Track> >(ps.getParameter<edm::InputTag>("displacedStandAloneMuons"))),
    packedPFCandToken_(consumes<vector<pat::PackedCandidate> >(ps.getParameter<edm::InputTag>("pfCands"))),
    recoJetToken_(consumes<vector<pat::Jet> >(ps.getParameter<edm::InputTag>("jets"))),
    genEvtInfoToken_(consumes<GenEventInfoProduct>(ps.getParameter<edm::InputTag>("genEvt"))),
@@ -361,6 +364,7 @@ ElectronSkimmer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
    desc.add<edm::InputTag>("nanoElectron",edm::InputTag("slimmedElectronsWithUserDataMinimal"));
    desc.add<edm::InputTag>("lowPtElectron",edm::InputTag("slimmedLowPtElectrons"));
    desc.add<edm::InputTag>("lowPtNanoElectron",edm::InputTag("updatedLowPtElectronsWithUserData"));
+   desc.add<edm:InputTag>("dsaMuon",edm::InputTag("displacedStandAloneMuons"));
    desc.add<edm::InputTag>("pfCands",edm::InputTag("packedPFCandidates"));
    desc.add<edm::InputTag>("jets",edm::InputTag("slimmedJets"));
    desc.add<edm::InputTag>("genEvt", edm::InputTag("generator"));
@@ -394,6 +398,7 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    iEvent.getByToken(recoNanoElectronToken_,recoNanoElectronHandle_);
    iEvent.getByToken(lowPtElectronToken_,lowPtElectronHandle_);
    iEvent.getByToken(lowPtNanoElectronToken_,lowPtNanoElectronHandle_);
+   iEvent.getByToken(dsaMuonToken_,dsaMuonHandle_);
    iEvent.getByToken(packedPFCandToken_,packedPFCandHandle_);
    iEvent.getByToken(recoJetToken_,recoJetHandle_);
    iEvent.getByToken(pileupInfosToken_,pileupInfosHandle_);
@@ -743,6 +748,48 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          nt.recoLowPtElectronGEDidx_.push_back(-999);
       }
 
+      // Handling DSA Muons
+      nt.nDSAMuon_ = dsaMuonHandle_->size();
+      std::vector<reco::Track> dsa_muonTracks{};
+      std::vector<math::XYZTLorentzVector> dsa_muon_p4s;
+
+      for (const auto & track : *dsaMuonHandle_) {
+         dsa_muonTracks.push_back(track);
+
+         // Construct TLorentzVector from track (muon mass assumed)
+         float mass = 0.10566; // GeV
+         float p = track.p();
+         float energy = sqrt(p*p + mass*mass);
+         math::XYZTLorentzVector p4(track.px(), track.py(), track.pz(), energy);
+         dsa_muon_p4s.push_back(p4);
+
+         // Basic kinematics
+         nt.recoDSAMuonPt_.push_back(track.pt());
+         nt.recoDSAMuonEta_.push_back(track.eta());
+         nt.recoDSAMuonPhi_.push_back(track.phi());
+         nt.recoDSAMuonE_.push_back(energy);
+         nt.recoDSAMuonPx_.push_back(track.px());
+         nt.recoDSAMuonPy_.push_back(track.py());
+         nt.recoDSAMuonPz_.push_back(track.pz());
+
+         // Vertex info
+         nt.recoDSAMuonVxy_.push_back(track.vertex().rho());
+         nt.recoDSAMuonVz_.push_back(track.vertex().z());
+
+         // Tracking info
+         nt.recoDSAMuonDxy_.push_back(track.dxy(pv.position()));
+         nt.recoDSAMuonDxyError_.push_back(track.dxyError());
+         nt.recoDSAMuonDz_.push_back(track.dz(pv.position()));
+         nt.recoDSAMuonDzError_.push_back(track.dzError());
+         nt.recoDSAMuonTrkChi2_.push_back(track.normalizedChi2());
+         nt.recoDSAMuonTrkProb_.push_back(TMath::Prob(track.chi2(), (int)track.ndof()));
+         nt.recoDSAMuonTrkNumTrackerHits_.push_back(track.hitPattern().numberOfValidTrackerHits());
+         nt.recoDSAMuonTrkNumPixHits_.push_back(track.hitPattern().numberOfValidPixelHits());
+         nt.recoDSAMuonTrkNumStripHits_.push_back(track.hitPattern().numberOfValidStripHits());
+
+         // Charge
+         nt.recoDSAMuonCharge_.push_back(track.charge());
+      }
       // increment lpt idx
       ilpt++;
       iSaved_lpt.push_back(ilpt_all);
