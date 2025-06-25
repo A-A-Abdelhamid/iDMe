@@ -80,6 +80,7 @@
 #include "iDMe/CustomTools/interface/DisplacedDileptonAOD.hh"
 #include "iDMe/CustomTools/interface/JetCorrections.hh"
 #include "iDMe/CustomTools/interface/NtupleContainer.hh"
+#include "iDMe/CustomTools/interface/NtupleContainerV2.hh"
 
 #include "TTree.h"
 #include "TMath.h"
@@ -103,6 +104,7 @@ class AODSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::one::Sh
       // ----------member data ---------------------------
       TTree *outT;
       NtupleContainer nt;
+      NtupleContainerV2 ntv2;
       edm::Service<TFileService> fs;
 
       std::mt19937 m_random_generator;
@@ -663,7 +665,7 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
    // Handling DSA Muons
-   nt.nDSAMuon_ = dsaMuonHandle_->size();
+   ntv2.nDSAMuon_ = dsaMuonHandle_->size();
    std::vector<reco::Track> dsa_muonTracks{};
    std::vector<math::XYZTLorentzVector> dsa_muon_p4s;
 
@@ -678,31 +680,31 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       dsa_muon_p4s.push_back(p4);
 
       // Basic kinematics
-      nt.recoDSAMuonPt_.push_back(track.pt());
-      nt.recoDSAMuonEta_.push_back(track.eta());
-      nt.recoDSAMuonPhi_.push_back(track.phi());
-      nt.recoDSAMuonE_.push_back(energy);
-      nt.recoDSAMuonPx_.push_back(track.px());
-      nt.recoDSAMuonPy_.push_back(track.py());
-      nt.recoDSAMuonPz_.push_back(track.pz());
+      ntv2.recoDSAMuonPt_.push_back(track.pt());
+      ntv2.recoDSAMuonEta_.push_back(track.eta());
+      ntv2.recoDSAMuonPhi_.push_back(track.phi());
+      ntv2.recoDSAMuonE_.push_back(energy);
+      ntv2.recoDSAMuonPx_.push_back(track.px());
+      ntv2.recoDSAMuonPy_.push_back(track.py());
+      ntv2.recoDSAMuonPz_.push_back(track.pz());
 
       // Vertex info
-      nt.recoDSAMuonVxy_.push_back(track.vertex().rho());
-      nt.recoDSAMuonVz_.push_back(track.vertex().z());
+      ntv2.recoDSAMuonVxy_.push_back(track.vertex().rho());
+      ntv2.recoDSAMuonVz_.push_back(track.vertex().z());
 
       // Tracking info
-      nt.recoDSAMuonDxy_.push_back(track.dxy(pv.position()));
-      nt.recoDSAMuonDxyError_.push_back(track.dxyError());
-      nt.recoDSAMuonDz_.push_back(track.dz(pv.position()));
-      nt.recoDSAMuonDzError_.push_back(track.dzError());
-      nt.recoDSAMuonTrkChi2_.push_back(track.normalizedChi2());
-      nt.recoDSAMuonTrkProb_.push_back(TMath::Prob(track.chi2(), (int)track.ndof()));
-      nt.recoDSAMuonTrkNumTrackerHits_.push_back(track.hitPattern().numberOfValidTrackerHits());
-      nt.recoDSAMuonTrkNumPixHits_.push_back(track.hitPattern().numberOfValidPixelHits());
-      nt.recoDSAMuonTrkNumStripHits_.push_back(track.hitPattern().numberOfValidStripHits());
+      ntv2.recoDSAMuonDxy_.push_back(track.dxy(pv.position()));
+      ntv2.recoDSAMuonDxyError_.push_back(track.dxyError());
+      ntv2.recoDSAMuonDz_.push_back(track.dz(pv.position()));
+      ntv2.recoDSAMuonDzError_.push_back(track.dzError());
+      ntv2.recoDSAMuonTrkChi2_.push_back(track.normalizedChi2());
+      ntv2.recoDSAMuonTrkProb_.push_back(TMath::Prob(track.chi2(), (int)track.ndof()));
+      ntv2.recoDSAMuonTrkNumTrackerHits_.push_back(track.hitPattern().numberOfValidTrackerHits());
+      ntv2.recoDSAMuonTrkNumPixHits_.push_back(track.hitPattern().numberOfValidPixelHits());
+      ntv2.recoDSAMuonTrkNumStripHits_.push_back(track.hitPattern().numberOfValidStripHits());
 
       // Charge
-      nt.recoDSAMuonCharge_.push_back(track.charge());
+      ntv2.recoDSAMuonCharge_.push_back(track.charge());
    }
 
 
