@@ -364,7 +364,7 @@ ElectronSkimmer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
    desc.add<edm::InputTag>("nanoElectron",edm::InputTag("slimmedElectronsWithUserDataMinimal"));
    desc.add<edm::InputTag>("lowPtElectron",edm::InputTag("slimmedLowPtElectrons"));
    desc.add<edm::InputTag>("lowPtNanoElectron",edm::InputTag("updatedLowPtElectronsWithUserData"));
-   desc.add<edm:InputTag>("dsaMuon",edm::InputTag("displacedStandAloneMuons"));
+   desc.add<edm::InputTag>("dsaMuon",edm::InputTag("displacedStandAloneMuons"));
    desc.add<edm::InputTag>("pfCands",edm::InputTag("packedPFCandidates"));
    desc.add<edm::InputTag>("jets",edm::InputTag("slimmedJets"));
    desc.add<edm::InputTag>("genEvt", edm::InputTag("generator"));
