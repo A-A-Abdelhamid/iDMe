@@ -663,6 +663,13 @@ AODSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
    // Handling DSA Muons
+   std::<vector<reco::Track> dsa_muonTracks{};
+   vector<math::XYZTLorentzVector> dsa_muon_p4s;
+   for (unsigned int i = 0; i < dsaMuonHandle_->size(); i++) {
+
+
+   }
+
 
    // Handling photons
    for (const auto & ph : *photonsHandle_) {

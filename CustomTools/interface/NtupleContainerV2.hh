@@ -272,6 +272,28 @@ public:
     vector<int> recoLowPtElectronGEDidx_;
     vector<bool> recoLowPtElectronGEDisMatched_;
 
+    // DSA Muons
+    int nDSAMuon_;
+    std::vector<float> recoDSAMuonPt_;
+    std::vector<float> recoDSAMuonEta_;
+    std::vector<float> recoDSAMuonPhi_;
+    std::vector<float> recoDSAMuonE_;
+    std::vector<float> recoDSAMuonPx_;
+    std::vector<float> recoDSAMuonPy_;
+    std::vector<float> recoDSAMuonPz_;
+    std::vector<float> recoDSAMuonVxy_;
+    std::vector<float> recoDSAMuonVz_;
+    std::vector<float> recoDSAMuonDxy_;
+    std::vector<float> recoDSAMuonDxyError_;
+    std::vector<float> recoDSAMuonDz_;
+    std::vector<float> recoDSAMuonDzError_;
+    std::vector<float> recoDSAMuonTrkChi2_;
+    std::vector<float> recoDSAMuonTrkProb_;
+    std::vector<int>   recoDSAMuonTrkNumTrackerHits_;
+    std::vector<int>   recoDSAMuonTrkNumPixHits_;
+    std::vector<int>   recoDSAMuonTrkNumStripHits_;
+    std::vector<int>   recoDSAMuonCharge_;
+   
     // Photons
     int nPhotons_;
     vector<float> PhotonEt_;
