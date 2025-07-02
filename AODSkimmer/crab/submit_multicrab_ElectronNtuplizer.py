@@ -133,11 +133,11 @@ def main():
                 continue
             if samp_type == 0:
                 if isSignal == 0:
-                    output_base = '/store/user/abdelham/iDMe/Samples/Ntuples/background_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
+                    output_base = '/store/user/alabdelh/iDMe/Samples/Ntuples/background_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
                 else:
-                    output_base = '/store/user/abdelham/iDMe/Samples/Ntuples/signal_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
+                    output_base = '/store/user/alabdelh/iDMe/Samples/Ntuples/signal_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
             else:
-                output_base = '/store/user/abdelham/iDMe/Samples/Ntuples/data_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
+                output_base = '/store/user/alabdelh/iDMe/Samples/Ntuples/data_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
             xrdClient.mkdir(output_base,flags.MkDirFlags.MAKEPATH)
             config.Data.outLFNDirBase = output_base
             config.Data.inputDataset = dataset
