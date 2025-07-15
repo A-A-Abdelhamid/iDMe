@@ -780,7 +780,7 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          nt.recoDSAMuonPhi_.push_back(dsaMuon.phi());
          nt.recoDSAMuonPhiErr_.push_back(dsaMuon.phiError());
 
-         nt.recoDSAMuonE_.push_back(dsaMuon.energy());
+         // nt.recoDSAMuonE_.push_back(dsaMuon.energy());
          nt.recoDSAMuonPx_.push_back(dsaMuon.px());
          nt.recoDSAMuonPy_.push_back(dsaMuon.py());
          nt.recoDSAMuonPz_.push_back(dsaMuon.pz());
