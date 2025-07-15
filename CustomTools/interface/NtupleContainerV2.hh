@@ -275,8 +275,13 @@ public:
     // DSA Muons
     int nDSAMuon_;
     std::vector<float> recoDSAMuonPt_;
+    std::vector<float> recoDSAMuonPtErr_;
     std::vector<float> recoDSAMuonEta_;
+    std::vector<float> recoDSAMuonEtaErr_;   
     std::vector<float> recoDSAMuonPhi_;
+    std::vector<float> recoDSAMuonPhiErr_;
+    std::vector<float> recoDSAMuonOuterPhi_; 
+    std::vector<float> recoDSAMuonOuterEta_;    
     std::vector<float> recoDSAMuonE_;
     std::vector<float> recoDSAMuonPx_;
     std::vector<float> recoDSAMuonPy_;
@@ -293,6 +298,15 @@ public:
     std::vector<int>   recoDSAMuonTrkNumPixHits_;
     std::vector<int>   recoDSAMuonTrkNumStripHits_;
     std::vector<int>   recoDSAMuonCharge_;
+    std::vector<int>   recoDSAMuonDisplacedId_;
+    std::vector<int>   recoDSAMuonTrkNumCSCHits_;
+    std::vector<int>   recoDSAMuonTrkNumHits_;
+    std::vector<int>   recoDSAMuonTrkNumPlanes_;
+    std::vector<int>   recoDSAMuonTrkNumDTHits_;
+    std::vector<int>   recoDSAMuonIdx_;
+
+
+    
    
     // Photons
     int nPhotons_;
