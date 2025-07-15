@@ -34,7 +34,7 @@ options.register('numThreads',
         VarParsing.VarParsing.varType.int,
         "Number of threads (for CRAB vs non-CRAB execution)")
 options.register("nEvents",
-	-1,
+	100,
 	VarParsing.VarParsing.multiplicity.singleton,
         VarParsing.VarParsing.varType.int,
 	"Number of events to process (defaults to all)")
