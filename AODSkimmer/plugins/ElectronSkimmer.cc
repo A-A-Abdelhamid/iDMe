@@ -344,7 +344,7 @@ void ElectronSkimmer::beginJob()
 
 // ------------ method called once each job just after ending the event loop  ------------
 void ElectronSkimmer::endJob() {}
-bool DSAMuonTableProducer::passesDisplacedID(const reco::Track& dsaMuon) const {
+bool ElectronSkimmer::passesDisplacedID(const reco::Track& dsaMuon) const {
   // displaced muon Id as recommended by Muon POG
   float validHits =  dsaMuon.hitPattern().numberOfValidMuonCSCHits() + dsaMuon.hitPattern().numberOfValidMuonDTHits();
   if(validHits > 12){
