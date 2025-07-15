@@ -123,7 +123,6 @@ class ElectronSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::on
 
    private:
       bool getCollections(const edm::Event&);
-      bool passesDisplacedID(const reco::Track& dsaMuon) const;
       virtual void beginJob() override;
       virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
@@ -344,20 +343,7 @@ void ElectronSkimmer::beginJob()
 
 // ------------ method called once each job just after ending the event loop  ------------
 void ElectronSkimmer::endJob() {}
-bool ElectronSkimmer::passesDisplacedID(const reco::Track& dsaMuon) const {
-  // displaced muon Id as recommended by Muon POG
-  float validHits =  dsaMuon.hitPattern().numberOfValidMuonCSCHits() + dsaMuon.hitPattern().numberOfValidMuonDTHits();
-  if(validHits > 12){
-    if(dsaMuon.hitPattern().numberOfValidMuonCSCHits() != 0 || (dsaMuon.hitPattern().numberOfValidMuonCSCHits() == 0 && dsaMuon.hitPattern().numberOfValidMuonDTHits() > 18)){
-      if(dsaMuon.normalizedChi2() < 2.5) {
-        if(dsaMuon.ptError()/dsaMuon.pt() < 1){
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
+
 void ElectronSkimmer::endRun(edm::Run const& iRun, edm::EventSetup const& iSetup) {}
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
@@ -766,54 +752,43 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       nt.nDSAMuon_ = dsaMuonHandle_->size();
       std::vector<reco::Track> dsa_muonTracks{};
       std::vector<math::XYZTLorentzVector> dsa_muon_p4s;
-      unsigned int i = 0;
-      for (const auto & dsaMuon : *dsaMuonHandle_) {
-         dsa_muonTracks.push_back(dsaMuon);
-      
-         nt.recoDSAMuonIdx_.push_back(i);
-         i=i+1;
-         // Basic kinematics
-         nt.recoDSAMuonPt_.push_back(dsaMuon.pt());
-         nt.recoDSAMuonPtErr_.push_back(dsaMuon.ptError());
-         nt.recoDSAMuonEta_.push_back(dsaMuon.eta());
-         nt.recoDSAMuonEtaErr_.push_back(dsaMuon.etaError());
-         nt.recoDSAMuonPhi_.push_back(dsaMuon.phi());
-         nt.recoDSAMuonPhiErr_.push_back(dsaMuon.phiError());
 
-         // nt.recoDSAMuonE_.push_back(dsaMuon.energy());
-         nt.recoDSAMuonPx_.push_back(dsaMuon.px());
-         nt.recoDSAMuonPy_.push_back(dsaMuon.py());
-         nt.recoDSAMuonPz_.push_back(dsaMuon.pz());
+      for (const auto & track : *dsaMuonHandle_) {
+         dsa_muonTracks.push_back(track);
+
+         // Construct TLorentzVector from track (muon mass assumed)
+         float mass = 0.10566; // GeV
+         float p = track.p();
+         float energy = sqrt(p*p + mass*mass);
+         math::XYZTLorentzVector p4(track.px(), track.py(), track.pz(), energy);
+         dsa_muon_p4s.push_back(p4);
+
+         // Basic kinematics
+         nt.recoDSAMuonPt_.push_back(track.pt());
+         nt.recoDSAMuonEta_.push_back(track.eta());
+         nt.recoDSAMuonPhi_.push_back(track.phi());
+         nt.recoDSAMuonE_.push_back(energy);
+         nt.recoDSAMuonPx_.push_back(track.px());
+         nt.recoDSAMuonPy_.push_back(track.py());
+         nt.recoDSAMuonPz_.push_back(track.pz());
 
          // Vertex info
-         nt.recoDSAMuonVxy_.push_back(dsaMuon.vertex().rho());
-         nt.recoDSAMuonVz_.push_back(dsaMuon.vertex().z());
+         nt.recoDSAMuonVxy_.push_back(track.vertex().rho());
+         nt.recoDSAMuonVz_.push_back(track.vertex().z());
 
          // Tracking info
-         nt.recoDSAMuonDxy_.push_back(dsaMuon.dxy());
-         nt.recoDSAMuonDxyError_.push_back(dsaMuon.dxyError());
-         nt.recoDSAMuonDz_.push_back(dsaMuon.dz());
-         nt.recoDSAMuonDzError_.push_back(dsaMuon.dzError());
-         nt.recoDSAMuonTrkChi2_.push_back(dsaMuon.normalizedChi2());
-         nt.recoDSAMuonTrkProb_.push_back(TMath::Prob(dsaMuon.chi2(), (int)dsaMuon.ndof()));
-         nt.recoDSAMuonTrkNumTrackerHits_.push_back(dsaMuon.hitPattern().numberOfValidTrackerHits());
-         nt.recoDSAMuonTrkNumPixHits_.push_back(dsaMuon.hitPattern().numberOfValidPixelHits());
-         nt.recoDSAMuonTrkNumStripHits_.push_back(dsaMuon.hitPattern().numberOfValidStripHits());
-         nt.recoDSAMuonOuterEta_.push_back(dsaMuon.outerEta());
-         nt.recoDSAMuonOuterPhi_.push_back(dsaMuon.outerPhi());
-
-         nt.recoDSAMuonTrkNumPlanes_.push_back(dsaMuon.hitPattern().muonStationsWithValidHits());
-         nt.recoDSAMuonTrkNumHits_.push_back(dsaMuon.hitPattern().numberOfValidMuonHits());
-         nt.recoDSAMuonTrkNumDTHits_.push_back(dsaMuon.hitPattern().numberOfValidMuonDTHits());
-         nt.recoDSAMuonTrkNumCSCHits_.push_back(dsaMuon.hitPattern().numberOfValidMuonCSCHits());
-
-
-        float passesDisplacedId = 0;
-        if(passesDisplacedID(dsaMuon)) passesDisplacedId=1;
-        nt.recoDSAMuonDisplacedId_.push_back(passesDisplacedId);
+         nt.recoDSAMuonDxy_.push_back(track.dxy(pv.position()));
+         nt.recoDSAMuonDxyError_.push_back(track.dxyError());
+         nt.recoDSAMuonDz_.push_back(track.dz(pv.position()));
+         nt.recoDSAMuonDzError_.push_back(track.dzError());
+         nt.recoDSAMuonTrkChi2_.push_back(track.normalizedChi2());
+         nt.recoDSAMuonTrkProb_.push_back(TMath::Prob(track.chi2(), (int)track.ndof()));
+         nt.recoDSAMuonTrkNumTrackerHits_.push_back(track.hitPattern().numberOfValidTrackerHits());
+         nt.recoDSAMuonTrkNumPixHits_.push_back(track.hitPattern().numberOfValidPixelHits());
+         nt.recoDSAMuonTrkNumStripHits_.push_back(track.hitPattern().numberOfValidStripHits());
 
          // Charge
-         nt.recoDSAMuonCharge_.push_back(dsaMuon.charge());
+         nt.recoDSAMuonCharge_.push_back(track.charge());
       }
       // increment lpt idx
       ilpt++;
