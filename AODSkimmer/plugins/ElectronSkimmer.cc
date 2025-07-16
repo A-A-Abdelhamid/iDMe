@@ -810,10 +810,12 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          nt.recoDSAMuonTrkNumHits_.push_back(track.hitPattern().numberOfValidMuonHits());
          nt.recoDSAMuonTrkNumPlanes_.push_back(track.hitPattern().muonStationsWithValidHits());
 
+        
          int passesDisplacedId = 0;
-         if(passesDisplacedID(track) passesDisplacedId=1;
+         if (passesDisplacedID(track)) {
+           passesDisplacedId = 1;
+         }
          nt.recoDSAMuonDisplacedId_.push_back(passesDisplacedId);
-
       }
       // increment lpt idx
       ilpt++;
