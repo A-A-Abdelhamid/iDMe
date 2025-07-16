@@ -123,6 +123,7 @@ class ElectronSkimmer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::on
 
    private:
       bool getCollections(const edm::Event&);
+      bool passesDisplacedID(const reco::Track& dsaMuon) const;
       virtual void beginJob() override;
       virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
@@ -327,6 +328,21 @@ ElectronSkimmer::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup)
 
 }
 
+
+bool ElectronSkimmer::passesDisplacedID(const reco::Track& dsaMuon) const {
+  // displaced muon Id as recommended by Muon POG
+  float validHits =  dsaMuon.hitPattern().numberOfValidMuonCSCHits() + dsaMuon.hitPattern().numberOfValidMuonDTHits();
+  if(validHits > 12){
+    if(dsaMuon.hitPattern().numberOfValidMuonCSCHits() != 0 || (dsaMuon.hitPattern().numberOfValidMuonCSCHits() == 0 && dsaMuon.hitPattern().numberOfValidMuonDTHits() > 18)){
+      if(dsaMuon.normalizedChi2() < 2.5) {
+        if(dsaMuon.ptError()/dsaMuon.pt() < 1){
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
 // ------------ method called once each job just before starting event loop  ------------
 void ElectronSkimmer::beginJob()
 {
@@ -793,6 +809,10 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          nt.recoDSAMuonTrkNumDTHits_.push_back(track.hitPattern().numberOfValidMuonDTHits());
          nt.recoDSAMuonTrkNumHits_.push_back(track.hitPattern().numberOfValidMuonHits());
          nt.recoDSAMuonTrkNumPlanes_.push_back(track.hitPattern().muonStationsWithValidHits());
+
+         float passesDisplacedId = 0;
+         if(passesDisplacedID(track) passesDisplacedId=1;
+         nt.recoDSAMuonDisplacedId_.push_back(passesDisplacedId);
 
       }
       // increment lpt idx
