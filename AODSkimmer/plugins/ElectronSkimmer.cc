@@ -789,6 +789,11 @@ ElectronSkimmer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
          // Charge
          nt.recoDSAMuonCharge_.push_back(track.charge());
+         nt.recoDSAMuonTrkNumCSCHits_.push_back(track.hitPattern().numberOfValidMuonCSCHits());
+         nt.recoDSAMuonTrkNumDTHits_.push_back(track.hitPattern().numberOfValidMuonDTHits());
+         nt.recoDSAMuonTrkNumHits_.push_back(track.hitPattern().numberOfValidMuonHits());
+         nt.recoDSAMuonTrkNumPlanes_.push_back(track.hitPattern().muonStationsWithValidHits());
+
       }
       // increment lpt idx
       ilpt++;
