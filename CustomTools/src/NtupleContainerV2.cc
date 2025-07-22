@@ -744,8 +744,14 @@ void NtupleContainerV2::ClearTreeBranches() {
     recoDSAMuonTrkNumTrackerHits_.clear();
     recoDSAMuonTrkNumPixHits_.clear();
     recoDSAMuonTrkNumStripHits_.clear();
-    
     recoDSAMuonCharge_.clear();
+    recoDSAMuonDisplacedId_.clear();
+    recoDSAMuonTrkNumCSCHits_.clear();
+    recoDSAMuonTrkNumHits_.clear();
+    recoDSAMuonTrkNumPlanes_.clear();
+    recoDSAMuonTrkNumDTHits_.clear();
+    recoDSAMuonIdx_.clear();
+    
     // Gen weight and pileup
     genwgt_ = 0;
     genpuobs_ = -9999;
