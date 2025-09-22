@@ -63,13 +63,30 @@ def cut9(events,info):
     cut = ak.all(np.abs(events.PFJet.METdPhi) > 0.75,axis=1)
     return events[cut], name, desc, plots
 
+
+
 def cut10(events,info):
     name = "cut10"
+    desc = "OSSF"
+    plots = True
+    cut = events.sel_vtx.sign == -1
+    return events[cut], name, desc, plots
+
+def cut11(events,info):
+    name = "cut11"
+    desc = "theta < 1.22 rad"
+    plots = True
+    cut = (events.sel_vtx.cos_collinear_fromPV_refit) > 0.4
+    return events[cut], name, desc, plots
+
+def cut12(events,info):
+    name = "cut12"
     desc = "BDT"
     plots = True
 
-    thres = 0.96 # BDT threshold; inference is done in analysisSubroutines
-
+    thres = 0.95 # BDT threshold; inference is done in analysisSubroutines
+    # score = np.asarray(events["BDTScore"])
+    # print(f"[BDT] min={np.min(score):.3f}  median={np.median(score):.3f}  max={np.max(score):.3f}")
     if len(events) != 0:
         cut = events['BDTScore'] > thres
     else:
