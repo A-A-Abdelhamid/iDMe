@@ -450,6 +450,10 @@ class iDMeProcessor(processor.ProcessorABC):
         histos['cutflow_nevts'] = {samp:cutflow_nevts}
         histos['cutflow_vtx_matched'] = {samp:cutflow_vtx_matched}
 
+        histos['run'] = processor.column_accumulator(ak.to_numpy(events.run))
+        histos['luminosityBlock'] = processor.column_accumulator(ak.to_numpy(events.luminosityBlock))
+        histos['event'] = processor.column_accumulator(ak.to_numpy(events.event))
+        
         return histos
 
     def postprocess(self, accumulator):
