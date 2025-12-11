@@ -138,14 +138,10 @@ def main():
                     output_base = '/store/user/alabdelh/iDMe/Samples/Ntuples/signal_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
             else:
                 output_base = '/store/user/alabdelh/iDMe/Samples/Ntuples/data_{0}/{1}/{2}/{3}/'.format(run_name,year,samp,subsample)
+
             xrdClient.mkdir(output_base,flags.MkDirFlags.MAKEPATH)
             config.Data.outLFNDirBase = output_base
-            config.Data.inputDataset = ''
-            config.Data.userInputFiles = ["/store/mc/RunIISummer20UL18MiniAODv2/QCD_HT2000toInf_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/70000/DE3E1B37-E4E1-204B-9473-D12AA8B07AA2.root"
-                                         ]
-            config.Data.splitting = 'FileBased'
-            config.Data.unitsPerJob = 1
-            config.Data.inputDBS = 'global' 
+            config.Data.inputDataset = dataset
             config.General.requestName = 'iDMe_' + subsample + datetime.now().strftime("_%Y_%m_%d-%H_%M")
             config.JobType.outputFiles = ['{0}.root'.format(subsample)]
             config.JobType.pyCfgParams = ['numThreads=1',
@@ -158,6 +154,7 @@ def main():
             p = Process(target=crabCommand,args=(options.crabCmd,),kwargs=kwargs)
             p.start()
             p.join()
+
 
 if __name__ == '__main__':
     main()
