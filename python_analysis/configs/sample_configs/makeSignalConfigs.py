@@ -6,8 +6,9 @@ import numpy as np
 import re
 import datetime as dt
 import os
-from argparse import ArgumentParser
 import glob
+from argparse import ArgumentParser
+
 
 parser = ArgumentParser()
 parser.add_argument("-m","--mode",required=True)
@@ -41,6 +42,7 @@ if mode != "sig" and mode != "bkg" and mode != "data":
     sys.exit("Invalid mode: use sig/bkg/data")
 
 xrdClient = client.FileSystem("root://cmseos.fnal.gov")
+
 
 if mode == "sig":
     if skimmed:
@@ -108,17 +110,20 @@ elif mode == "bkg":
             subsamples = [bkg]
         else:
             base_dir = f"{prefix}/{year}/{bkg}"
+
             subsamples = [d.name for d in xrdClient.dirlist(base_dir)[1]]
         for subsample in subsamples:
             if skimmed:
                 target_dir = base_dir
             else:
                 target_dir = f"{base_dir}/{subsample}/"
+
             #rootFiles = subprocess.run(['eos','root://cmseos.fnal.gov/','find','-name','*.root','-f',target_dir],stdout=subprocess.PIPE).stdout.decode('utf-8').splitlines()
             #rootFiles = [r for r in rootFiles if '.root' in r]
             rootFiles = [ f for f in glob.glob(f"/eos/uscms/{target_dir}/**/*.root", recursive=True) ]
             fileDirs = ["/".join(f.split("/")[:-1])+"/" for f in rootFiles]
             fileDirs = [ d.split("/eos/uscms/")[-1] for d in fileDirs]
+
             fileDirs = list(set(fileDirs)) # list of unique file directories
             
             info = {}
