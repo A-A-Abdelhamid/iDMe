@@ -362,7 +362,7 @@ bool ElectronSkimmer::passesDisplacedID(const reco::Track& dsaMuon) const {
   if(validHits > 12){
     if(dsaMuon.hitPattern().numberOfValidMuonCSCHits() != 0 || (dsaMuon.hitPattern().numberOfValidMuonCSCHits() == 0 && dsaMuon.hitPattern().numberOfValidMuonDTHits() > 18)){
       if(dsaMuon.normalizedChi2() < 2.5) {
-	if(dsaMuon.ptError()/dsaMuon.pt() < 1){
+	    if(dsaMuon.ptError()/dsaMuon.pt() < 1){
           return true;
         }
       }
