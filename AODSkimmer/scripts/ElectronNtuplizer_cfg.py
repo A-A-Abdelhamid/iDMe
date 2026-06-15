@@ -11,8 +11,8 @@ from Configuration.ProcessModifiers.run2_miniAOD_UL_cff import run2_miniAOD_UL
 
 #Run3 imports
 from Configuration.Eras.Era_Run3_cff import Run3                   #corresponds to Run3 2022 (maybe)
-from Configuration.Eras.Era_Run3_2023_cff import Run3_2023         #corresponds to Run3 2023
-from Configuration.Eras.Era_Run3_2024_cff import Run3_2024         # 2024
+#from Configuration.Eras.Era_Run3_2023_cff import Run3_2023         #corresponds to Run3 2023
+#from Configuration.Eras.Era_Run3_2024_cff import Run3_2024         # 2024
 
 import json
 import sys
@@ -90,7 +90,7 @@ elif options.year == '2018':
     recoEgammaTools_era = '2018-UL'
 
 # Run3 below options following https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun3
-elif options.year == '2022':
+elif options.year == '2022' or options.year == '2022EE':
     globaltag = '130X_dataRun3_v2' if options.data else '130X_mcRun3_2022_realistic_v5'  
     #For data, you can also use 124X_dataRun3_PromptAnalysis_v1 
     era = Run3
@@ -293,7 +293,7 @@ process.ntuples = ElectronSkimmer.clone(
 # old version
 #from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 # Run3 working version?
-from EgammaUser.EgammaPostRecoTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
+from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
 # Run3 following https://twiki.cern.ch/twiki/bin/viewauth/CMS/MultivariateElectronIdentificationRun3
 setupEgammaPostRecoSeq(process,
                        runEnergyCorrections=False, # XYZ deactivated bc not working for Run3 yet, I think?

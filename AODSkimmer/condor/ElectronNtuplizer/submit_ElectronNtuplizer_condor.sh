@@ -15,7 +15,7 @@ fname=`echo $flist_full | rev | cut -d "/" -f 1 | rev | cut -d "." -f 1`
 
 mass=`echo $fname | cut -d "_" -f 1-2`
 ctau=`echo $fname | cut -d "_" -f 3`
-outDirName="${mass}/${ctau}"
+outDirName="iDMmu/${mass}/${ctau}"
 
 mkdir -p split_fileLists
 mkdir -p Logs

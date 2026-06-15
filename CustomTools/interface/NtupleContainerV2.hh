@@ -22,19 +22,17 @@ public:
 
     // Trigger and event-level branches
     unsigned int fired_;
-    //unsigned int fired16_;
-    //unsigned int fired17_;
-    //unsigned int fired18_;
     unsigned long long eventNum_;
     unsigned long long runNum_;
     unsigned long long lumiSec_;
     bool isData_;
     bool isSignal_;
     string trigNames_[100];
-    bool trigPassed_[100]; // more than we need to be safe
+    bool trigPassed_[100];
     int numTrigs_ = 0;
     
     float fixedGridRhoFastjetAll_;
+
     // MET Filters
     uint32_t METFiltersFailBits_;
 
@@ -49,7 +47,6 @@ public:
     int genputrue_;
     vector<int> genID_;
     vector<int> genMotherID_;
-    // Only save hard-process gen particles
     vector<int> genCharge_;
     vector<float> genPt_;
     vector<float> genEta_;
@@ -63,6 +60,124 @@ public:
     vector<float> genVx_;
     vector<float> genVy_;
     vector<float> genMass_;
+
+    // All gen particles. This is the single complete gen-particle collection.
+    int nGenParticle_;
+    vector<int> genPartID_;
+    vector<int> genPartMotherID_;                 // immediate mother PDG ID
+    vector<int> genPartFirstDifferentMotherID_;   // first mother after walking through same-PDG copies
+    vector<int> genPartStatus_;
+    vector<int> genPartCharge_;
+    vector<float> genPartPt_;
+    vector<float> genPartEta_;
+    vector<float> genPartPhi_;
+    vector<float> genPartEn_;
+    vector<float> genPartPx_;
+    vector<float> genPartPy_;
+    vector<float> genPartPz_;
+    vector<float> genPartVxy_;
+    vector<float> genPartVz_;
+    vector<float> genPartVx_;
+    vector<float> genPartVy_;
+    vector<float> genPartMass_;
+    vector<int> genPartIsFirstCopy_;
+    vector<int> genPartIsLastCopy_;
+    vector<int> genPartIsLastCopyBeforeFSR_;
+    vector<int> genPartIsHardProcess_;
+    vector<int> genPartFromHardProcessFinalState_;
+    vector<int> genPartFromHardProcessBeforeFSR_;
+    vector<int> genPartIsPromptFinalState_;
+
+    // Gen Signal Muon from iDM signal only: status == 1 and motherID == 1000023
+    int genSigMuonCharge_;
+    int genSigMuonMotherID_;
+    int genSigMuonStatus_;
+    float genSigMuonPt_;
+    float genSigMuonEta_;
+    float genSigMuonPhi_;
+    float genSigMuonEn_;
+    float genSigMuonPx_;
+    float genSigMuonPy_;
+    float genSigMuonPz_;
+    float genSigMuonVxy_;
+    float genSigMuonVz_;
+    float genSigMuonVx_;
+    float genSigMuonVy_;
+    bool genSigMuonMatched_;
+    std::string genSigMuonMatchType_;
+    int genSigMuonMatchIdxLocal_;
+    int genSigMuonMatchIdxGlobal_;
+    float genSigMuonMass_;
+    int genSigMuonImmediateMotherID_;
+    int genSigMuonFirstDifferentMotherID_;
+    int genSigMuonIsFirstCopy_;
+    int genSigMuonIsLastCopy_;
+    int genSigMuonIsLastCopyBeforeFSR_;
+    int genSigMuonIsHardProcess_;
+    int genSigMuonFromHardProcessFinalState_;
+    int genSigMuonFromHardProcessBeforeFSR_;
+    int genSigMuonIsPromptFinalState_;
+
+    // New nearest-reco matching diagnostics
+    float genSigMuonMinDrToRecoMuon_;
+    int genSigMuonMatchRecoMuonIdx_;
+    float genSigMuonMinDrToDSAMuon_;
+    int genSigMuonMatchDSAMuonIdx_;
+
+    // Gen Signal Anti-Muon from iDM signal only: status == 1 and motherID == 1000023
+    int genSigAntiMuonCharge_;
+    int genSigAntiMuonMotherID_;
+    int genSigAntiMuonStatus_;
+    float genSigAntiMuonPt_;
+    float genSigAntiMuonEta_;
+    float genSigAntiMuonPhi_;
+    float genSigAntiMuonEn_;
+    float genSigAntiMuonPx_;
+    float genSigAntiMuonPy_;
+    float genSigAntiMuonPz_;
+    float genSigAntiMuonVxy_;
+    float genSigAntiMuonVz_;
+    float genSigAntiMuonVx_;
+    float genSigAntiMuonVy_;
+    bool genSigAntiMuonMatched_;
+    std::string genSigAntiMuonMatchType_;
+    int genSigAntiMuonMatchIdxLocal_;
+    int genSigAntiMuonMatchIdxGlobal_;
+    float genSigAntiMuonMass_;
+    int genSigAntiMuonImmediateMotherID_;
+    int genSigAntiMuonFirstDifferentMotherID_;
+    int genSigAntiMuonIsFirstCopy_;
+    int genSigAntiMuonIsLastCopy_;
+    int genSigAntiMuonIsLastCopyBeforeFSR_;
+    int genSigAntiMuonIsHardProcess_;
+    int genSigAntiMuonFromHardProcessFinalState_;
+    int genSigAntiMuonFromHardProcessBeforeFSR_;
+    int genSigAntiMuonIsPromptFinalState_;
+
+    // New nearest-reco matching diagnostics
+    float genSigAntiMuonMinDrToRecoMuon_;
+    int genSigAntiMuonMatchRecoMuonIdx_;
+    float genSigAntiMuonMinDrToDSAMuon_;
+    int genSigAntiMuonMatchDSAMuonIdx_;
+
+    // Gen Signal Dimuon
+    float genSigDimuonPt_;
+    float genSigDimuonEta_;
+    float genSigDimuonPhi_;
+    float genSigDimuonEn_;
+    float genSigDimuonMass_;
+    float genSigDimuonDr_;
+    float genSigDimuonMETdPhi_;
+    float genSigDimuonVxy_;
+    float genSigDimuonVz_;
+    float genSigDimuonVx_;
+    float genSigDimuonVy_;
+
+    int nGenSigMuonFinal_;
+    bool genSigMuonIsValid_;
+    bool genSigAntiMuonIsValid_;
+    bool genSigDimuonIsValid_;
+    bool signalDimuonReconstructed_;
 
     // Gen Electron & Positron from iDM signal
     int genEleCharge_;
@@ -82,6 +197,8 @@ public:
     std::string genEleMatchType_;
     int genEleMatchIdxLocal_;
     int genEleMatchIdxGlobal_;
+    bool genEleMatchedAllLowPt_;
+    int genEleMatchIdxAllLowPt_;
 
     int genPosCharge_;
     int genPosMotherID_;
@@ -100,6 +217,8 @@ public:
     std::string genPosMatchType_;
     int genPosMatchIdxLocal_;
     int genPosMatchIdxGlobal_;
+    bool genPosMatchedAllLowPt_;
+    int genPosMatchIdxAllLowPt_;
 
     // Gen Electron + Positron info
     float genEEPt_;
@@ -114,7 +233,6 @@ public:
     float genEEVx_;
     float genEEVy_;
 
-    // Track whether full signal (e and p) are reconstructed
     bool signalReconstructed_;
     
     // Gen jet
@@ -131,13 +249,33 @@ public:
     float genLeadMETPy_;
     float genLeadMETET_;
 
-    // Reco Particles
-    // Muons: used only for SF measurement with Z/Gamma events
+    ///////////////////////
+    //// Reco branches ////
+    ///////////////////////
+
+    // Muons
     int nMuon_;
     vector<float> recoMuonPt_;
+    vector<float> recoMuonPtErr_;
     vector<float> recoMuonEta_;
+    vector<float> recoMuonEtaErr_;
     vector<float> recoMuonPhi_;
+    vector<float> recoMuonPhiErr_;
     vector<float> recoMuonEnergy_;
+    vector<float> recoMuonE_;
+    vector<float> recoMuonVxy_;
+    vector<float> recoMuonVz_;
+    vector<float> recoMuonVx_;
+    vector<float> recoMuonVy_;
+    vector<float> recoMuonDxy_;
+    vector<float> recoMuonDxyError_;
+    vector<float> recoMuonDz_;
+    vector<float> recoMuonDzError_;
+    vector<float> recoMuonTrkChi2_;
+    vector<float> recoMuonTrkProb_;
+    vector<int> recoMuonTrkNumTrackerHits_;
+    vector<int> recoMuonTrkNumPixHits_;
+    vector<int> recoMuonTrkNumStripHits_;
     vector<float> recoMuonCharge_;
     vector<int> recoMuonIDcutBasedLoose_;
     vector<int> recoMuonIDcutBasedMedium_;
@@ -211,9 +349,10 @@ public:
     vector<int> recoElectronExpMissingInnerHits_;
     vector<bool> recoElectronConversionVeto_;
     vector<bool> recoElectronIsEE_;
-    // special variables for the x-cleaning study
     vector<bool> recoElectronHasLptMatch_;
     vector<int> recoElectronLptMatchIdx_;
+    vector<bool> recoElectronHasAllLptMatch_;
+    vector<int> recoElectronAllLptMatchIdx_;
 
     // Low pT electrons
     int nElectronLowPt_;
@@ -267,10 +406,65 @@ public:
     vector<int> recoLowPtElectronExpMissingInnerHits_;
     vector<bool> recoLowPtElectronConversionVeto_;
     vector<bool> recoLowPtElectronIsEE_;
-    // special variables for the x-cleaning study
     vector<bool> recoLowPtElectronIsXCleaned_;
     vector<int> recoLowPtElectronGEDidx_;
     vector<bool> recoLowPtElectronGEDisMatched_;
+
+    // All Low pT electrons
+    int nElectronAllLowPt_;
+    vector<float> recoAllLowPtElectronPt_;
+    vector<float> recoAllLowPtElectronEta_;
+    vector<float> recoAllLowPtElectronEtaError_;
+    vector<float> recoAllLowPtElectronPhi_;
+    vector<float> recoAllLowPtElectronPhiError_;
+    vector<float> recoAllLowPtElectronID_;
+    vector<float> recoAllLowPtElectronAngularRes_;
+    vector<float> recoAllLowPtElectronE_;
+    vector<float> recoAllLowPtElectronVxy_;
+    vector<float> recoAllLowPtElectronVz_;
+    vector<float> recoAllLowPtElectronDxy_;
+    vector<float> recoAllLowPtElectronDxyError_;
+    vector<float> recoAllLowPtElectronDz_;
+    vector<float> recoAllLowPtElectronDzError_;
+    vector<float> recoAllLowPtElectronTrkChi2_;
+    vector<float> recoAllLowPtElectronTrkIso_;
+    vector<float> recoAllLowPtElectronTrkRelIso_;
+    vector<float> recoAllLowPtElectronCaloIso_;
+    vector<float> recoAllLowPtElectronCaloRelIso_;
+    vector<float> recoAllLowPtElectronPFIso_;
+    vector<float> recoAllLowPtElectronPFRelIso_;
+    vector<float> recoAllLowPtElectronMiniIso_;
+    vector<float> recoAllLowPtElectronMiniRelIso_;
+    vector<float> recoAllLowPtElectronPFIsoEleCorr_;
+    vector<float> recoAllLowPtElectronPFRelIsoEleCorr_;
+    vector<float> recoAllLowPtElectronMiniIsoEleCorr_;
+    vector<float> recoAllLowPtElectronMiniRelIsoEleCorr_;
+    vector<float> recoAllLowPtElectronTrkProb_;
+    vector<float> recoAllLowPtElectronChadIso_;
+    vector<float> recoAllLowPtElectronNhadIso_;
+    vector<float> recoAllLowPtElectronPhoIso_;
+    vector<float> recoAllLowPtElectronRhoEA_;
+    vector<int> recoAllLowPtElectronTrkNumTrackerHits_;
+    vector<int> recoAllLowPtElectronTrkNumPixHits_;
+    vector<int> recoAllLowPtElectronTrkNumStripHits_;
+    vector<int> recoAllLowPtElectronCharge_;
+    vector<float> recoAllLowPtElectronMinDrToReg_;
+    vector<bool> recoAllLowPtElectronIsPF_;
+    vector<bool> recoAllLowPtElectronGenMatched_;
+    vector<int> recoAllLowPtElectronMatchType_;
+    vector<vector<float> > recoAllLowPtElectronDrToJets_;
+    vector<vector<float> > recoAllLowPtElectronDphiToJets_;
+    vector<float> recoAllLowPtElectronFull5x5_sigmaIetaIeta_;
+    vector<float> recoAllLowPtElectronAbsdEtaSeed_;
+    vector<float> recoAllLowPtElectronAbsdPhiIn_;
+    vector<float> recoAllLowPtElectronHoverE_;
+    vector<float> recoAllLowPtElectronAbs1overEm1overP_;
+    vector<int> recoAllLowPtElectronExpMissingInnerHits_;
+    vector<bool> recoAllLowPtElectronConversionVeto_;
+    vector<bool> recoAllLowPtElectronIsEE_;
+    vector<bool> recoAllLowPtElectronIsXCleaned_;
+    vector<int> recoAllLowPtElectronGEDidx_;
+    vector<bool> recoAllLowPtElectronGEDisMatched_;
 
     // DSA Muons
     int nDSAMuon_;
@@ -294,16 +488,16 @@ public:
     std::vector<float> recoDSAMuonDzError_;
     std::vector<float> recoDSAMuonTrkChi2_;
     std::vector<float> recoDSAMuonTrkProb_;
-    std::vector<int>   recoDSAMuonTrkNumTrackerHits_;
-    std::vector<int>   recoDSAMuonTrkNumPixHits_;
-    std::vector<int>   recoDSAMuonTrkNumStripHits_;
-    std::vector<int>   recoDSAMuonCharge_;
-    std::vector<int>   recoDSAMuonDisplacedId_;
-    std::vector<int>   recoDSAMuonTrkNumCSCHits_;
-    std::vector<int>   recoDSAMuonTrkNumHits_;
-    std::vector<int>   recoDSAMuonTrkNumPlanes_;
-    std::vector<int>   recoDSAMuonTrkNumDTHits_;
-    std::vector<int>   recoDSAMuonIdx_;
+    std::vector<int> recoDSAMuonTrkNumTrackerHits_;
+    std::vector<int> recoDSAMuonTrkNumPixHits_;
+    std::vector<int> recoDSAMuonTrkNumStripHits_;
+    std::vector<int> recoDSAMuonCharge_;
+    std::vector<int> recoDSAMuonDisplacedId_;
+    std::vector<int> recoDSAMuonTrkNumCSCHits_;
+    std::vector<int> recoDSAMuonTrkNumHits_;
+    std::vector<int> recoDSAMuonTrkNumPlanes_;
+    std::vector<int> recoDSAMuonTrkNumDTHits_;
+    std::vector<int> recoDSAMuonIdx_;
 
     // Photons
     int nPhotons_;
@@ -501,10 +695,8 @@ public:
     vector<float> vtx_e2_refitChi2_;
 
 protected:
-    // Reco and gen TTrees
     TTree * outT;
 
 };
-
 
 #endif
